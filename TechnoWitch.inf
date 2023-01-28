@@ -1,0 +1,555 @@
+Release 1;
+Statusline time;
+CONSTANT DEATH_MENTION_UNDO;
+Constant OBJECT_SCORE 1;
+Constant MAX_SCORE 100;
+Constant MAX_CARRIED = 7;
+
+constant debug;
+Constant Story "^^A TechnoWitch Creative - by House of Imp - Making nonsense real.^^";
+
+Constant Headline "^^TechnoWitch Inc.^ ^
+by Jenny K. Brennan 2022 ^^
+
+A new job, a new boss, an interesting old startup with sketchy motivations. What could possibly go wrong? ^^
+Type ~About~ for more information. ^^";
+!Replace ReviseMulti;
+Include "Parser";
+
+!Section Ways to win or loose
+
+[ DeathMessage;
+switch (deadflag) 
+{
+!note. Deadflag 1 is for simply getting fired. With permanent psychological damage, many dark memories to deal with, but alive and with a severence pay. Could have been worse sort of thing.
+1: print "To write. Here's what happens as you get fired, the reprecussions, the slow fading of memories from your time in the company. TechnoWitch Inc can not be found. Not mentioned online, in any official documents. There are whispers but no one speaks.  You go on your way, slowly forgetting.";
+!Note. Deadflag 2 for when Brian has been successfuly rendered insane or permanently moved to  Dungeon catering.
+2: print "To write. The  epilog. You have Brian's job, has redecorated the office, promoted Janine to HR as well as funded her adult education courses in reading and writing. Other good things have happened in the TechnoWitch company the last year or so."; 
+!Note. Deadflag 3 is used for after a brutal killing of an NPC. 
+3: print "Whatever compelled you to commit this horrible deed, TechnoWitch appreciates your dedication and attention to detail. May you reside in hell for eternity and beyond. ^
+Well done!";
+4: print "Now, that was just dumb. Good luck next time.";}];
+
+attribute legible;
+attribute BeenChecked;
+attribute BeenSeen;
+attribute broken;
+attribute Danger;
+
+!Include "Locksmith";
+
+Include "betatest";
+Include "VerbLib";
+include "About";
+Include "Grammar";
+Include "smartcantgo";
+!Extend 'lock' first * noun=DefaultLockTest -> DefaultLock;
+!Extend 'unlock' first * noun=DefaultLockTest -> DefaultUnlock;  
+Verb 'Talk' 
+*'to' creature              -> Talk;
+[ TalkSub;
+"Talking is all well and good man. But it might be better to be more specific. Like for example ~ask someone about something~, or ~give something to someone~.";   ];
+
+![ReadSub;
+!"Read what?"; ];
+
+!Initialising 
+
+[Initialise;
+SetTime (590, 1);
+location = Warehouse;
+move hag to warehouse;
+move BillyRat to Office;
+move letter to player;
+!move CDCase to player;
+move nokia to player;
+move casio to player;
+give casio worn;
+StartDaemon (Warehouse);
+thedark.description = "It's daark in here. WTF?";
+player.description = "Do you really wanna go there?";
+
+!Restore saved game
+
+print "Would you like to restore a saved game? ";
+if (YesOrNo()) <Restore>;
+print "^^
+You made it. and that's about the only good thing you can say about this first day on a new job. After realizing that the worn looking dirty warehouse at the end of the road actually was the place, you entered the building with a good amount of skepticism. As you shut the big metal door behind you, you really start to wonder. If it hadn't been for the rent being late this month and the guinea pig staring with such disspoinment at yu while refusing to eat the cheaper brand Hamster chow, you wouldn't even bother. 
+^
+But here you are. Shaved and polished, sort of. You do want to make a good impression but you're not sure you know what that means anymore. It was just dumb luck that you had a pair of clean jeans tucked away in a drawer. All things going to shit the last few years hadn't improved the fit any, but hopefully no one will notice a partially open fly beneath your oversized T. ^
+And that was just the beginning.^
+Waiting for you at home is one hell of a mess because the coffee filter folded itself just wrong.
+Your Nokia's battery died on the way here, because the charger hadn't been plugged in.  And then the bus skipped a stop and you had to walk back several blocks before finding the place. ^
+You are sure you are late by now. Your casio wrist watch tells you nothing as it's dead. Thanks to fucking Rover, the miniature helldog from next door.  ^
+With both your Nokia and watch out of commission, your sense of time is gone so you have no idea exactly how late you are.^
+^
+Once inside, you find yourself in a windowless space  where the reek of aged electronics and damp neglect permiate the air. ^
+
+Instantly, it feels like you've been here for hours, listening to the occational crackling of some old radio and the unsettling noises from critters unseen. You shudder.^
+And then you are no longer alone in this odd space filled with junk. The old hag that suddenly hovers too  close hadn't so much appeared as crept up next to you like slime mold stalking a lonely fungal spore in its petrie dish. You barely choke down a shriek when she thrusts her head up in your face.^ 
+New meat, she says. It's not a question.  ^^
+You nod while forcing your heart to slow the fuck down.   Determined to be polite, you smile. You know it's not your best effort but she doesn't seem to notice. Her voice crackles and hisses near your ear as she says, Boo!, grins, pullss her head back and sputters a gob of tobacco scum at your feet and scrapes at her balding scalp. ^^
+She picks brown gunk out of the corner of her one remaining eye and focuses it unsteadily on you. Without another word, she waggles her tongue and picks at it with index finger and thumb to dislodge from it something you can't, and might not want to identify. You try not to think about it.^
+Then she quickly turns  and retreats to where she must have been before, leaving you to it.  ^
+You draw a shaky breath and attempt to remember why you are even there. Ah, right. it's called work. Yeah, you do need a job. But suddenly you are not so sure.";
+];
+
+object limbo"limbo"
+with name 'limbo',
+description "How did you get in here?",
+has;
+
+include "Zoo";
+include "Hag";
+Include "ExtraSubs";
+
+!Classes
+
+class TWRoom
+with description "It's a room without a description.",
+cant_go [; 
+SmartCantGo(); ],
+react_before[;
+smell:
+if (noun == player)
+"you take a careful sniff and immediately regret it. you don't remember forgetting deodorant. Oh well, too late now anyways.";
+if (noun == nothing && location ofclass TWRoom)
+"You can smell nothing but dust and long time neglect in ", (the) parent (player), ".";
+rfalse;
+listen:
+if (noun == player)
+"Listen to me, it's always listen to me. What is it with you and erhm, you anyways?";
+if (noun == nothing && location ofclass TWRoom)
+"You think 	you hear a faint buzzing from somewhere in ", (the) real_location, ", but that's probably just in your head.";
+rfalse;
+],
+has light;
+
+class furniture
+!Note that Furniture class is ultimately not very usable. Think I'll remove it.  
+with name 'furniture',
+description "Furniture is something to sit or stand on. Something with a supporter attribute, not necessarily container. Should be ultimately concealed and static unless otherwise specified.",
+has supporter scenery; 
+
+class gadget
+with Name 'gadget',
+description "it's a gadget. What is it? Hell if i know. TechnoWitch spreads them around like crude innuendos and bad moods. Do with it what you want. ^
+If you just read that description it means that this particular gadget has no description. File a bug with TechnoWitch inc if you wish. Type 'about' for more information.",
+before [;
+touch, smell, taste, eat: "I know you didn't have breakfast man, but really? Put that thing away before you do something stupid.";
+turn, take, push, pull, attack: "Now why would you do That? Leave it man";
+],
+Has ;
+
+
+!Class staff was here
+class TWDoor
+has ;
+class TWKey
+has ;
+
+!Outside 
+TWRoom Outside "Outside technoWitch Inc, by the front door"
+with name 'outside',
+description[;
+print  "You are outside the TechnoWitch Inc warehouse, where the road away runs a straight line on cracked asfalt through a sun dappled  indrustrial block on the outskirts of town. In the distance, a sad looking sign indicates a bus stop. But you know from experience that the bus doesn't stop there. Dusty heat rises from the blacktop and the silence seems strange considering the presence of industry and seemingly active businesses on either side of the road. ^
+You squint at the nearest building, not dissimilar to the one you are standing in front of. After closer scrutiny it does seem abandoned. A small cluster of office spaces on the other side of the road seem equally empty and neglected.^";
+if (Bottle in location && bottle notin player)
+print"An empty water bottle is caught by a sudden gust of hot air and skitter a short distance along the dirty sand where it meets the blacktop.^";
+!rtrue;
+"At the side of the gray metal door stands a vertical concrete pipe filled with sand and desicated cigarette butts. It doesn't seem to have been used for some time. From here you can go North to go inside. But if you really want to head out of here and forget about this place and the job waiting for you inside, just say ~quit~^
+TechnoWitch don't Judge. But be aware that if you do decide to enter, the front door will lock automatically and stay locked for the duration.^^
+Duration? Well, that all depends on how you do in there man.";
+],
+before[;
+smell: "The air outside is dry and dusty with the unmistakeable tang of hot ashfalt and lingering exhaust.";
+listen: "There's a distant hum of traffic and machinery, reminding you that there is a town nearby. In this spot however, it's eerily quiet. ";
+],
+n_to MainEntranceDoor,
+has ;
+object Ashtray "concrete ashtray" Outside
+with name 'ashtray' 'pipe' 'cement' 'concrete' 'cigarette' 'butt' 'butts',
+description
+"It's a cement pipe standing verticlly at the front door. It's filled with sand. A few cigarette butts poke out of the sand, evidence of someone checking out for the occational smoke. But none of the butts look recent.",
+before[;
+enter:
+"You climb up on top of the cement pipe. You stand there awkwardly for a minute, wonering why that was necessary.  The view is the same up there. You climb back down to the ground, hoping no one saw you, brushing off a bit of sand from your hands.";
+search:
+"You dig your fingers into the sand but find nothing of interest.";
+take, push, pull,  turn, burn:
+"Nah, don't worry about it.  It looks to have stood there since the eighties and it will still be there  in another forty years.";
+],
+has concealed supporter;
+
+object sand "sand"limbo
+with name 'sand',
+description "The sand from the cement ashtray outside the TW warehouse. Not particularly fine, or coarse. Smells bad. But that's pretty much it.",
+before[;
+search, turn, push, pull:
+<<search ashtray>>;
+take, transfer:
+"That sand is fine just where it is man. Just leave it.";
+],
+has scenery; 
+
+object Bottle "plastic bottle" Outside
+with name 'bottle' 'plastic',
+description
+"A regular half liter plastic bottle. The scratched and torn label is too faded to tell you anything of what was once inside. There is no lid.",
+has concealed container ;
+
+!Warehouse
+
+TWRoom Warehouse "Warehouse"
+with name 'warehouse' 'storage room' 'here',
+daemon[;
+if (location == Warehouse && Outside has visited)
+{
+give MainEntranceDoor ~open; 
+give mainEntranceDoor locked; 
+give hag Danger;
+StopDaemon (Warehouse);
+"When you're back inside, the door slams shut behind you. You jump and look back  at the heavy metal door.   There's no one there. No  wind but a hurricane could have moved that damn thing. Nonetheless, it's closed now. You pull the handle just to discover it's locked. ^
+The old hag shuffles up behind you and hisses, ~You made your choice then?~ ^
+Without waiting for an answer, she returns to her stool, humming something without tone or melody. ^
+You turn from the door and glare at the hag in silence. You made a choice? What choice exactly was that.";
+}
+],
+
+n_to[;
+if (OfficeDoor has open) return OfficeDoor;
+"It might seem like a silly detail, but you will have to open the office door before going that way."; ], 
+s_to [;
+if (MainEntranceDoor has open) return MainEntranceDoor;
+"This might seem a bit petty to you, but you will have to open the main door before going that way";
+],
+description[;
+if (Outside has visited)"The Technowitch warehouse seemes even gloomier and dirtier now. You avoid thinking about the way out. You do need this job.";
+if (location has visited) 
+"You are in The TechnoWitch Inc warehouse. Outdated junk is everywhere. The  seemingly bottomless supply of crap is quickly getting you down, Observing the props from your tweens will only make you doubt your existence more. Don't look, Friend. For nowthere's nothing to gain by rummaging through that pile.";
+!give location BeenChecked;
+"You're in a windowless warehouse where flickering flourescent light make your head hurt. Shelves and crates of outdated electronics fill every part of the space. ^
+Mid tower Dells, gutted VCRs with stuck tapes spilling insides atop gaudy plastic bags of hot pink leg-warmers. ^ 
+Boxes and grimy piles of modems, nintendo cartridges, and bottles of hairspray. Hundreds, thousands of bottles of hairspray. 
+Your mind blanks for a moment at the sight of all that freon powered glamour, but you ban the sensation. ^
+Retired hair spray has to live somewhere. You don' judge. ^
+A huge wooden cable roll stands pushed up against an empty concrete wall. The transistor radio sitting on top of it crackles and hisses. A rickety stool stands between the cable roll and the only other door in sight. It appears to lead to and office.^";
+],
+before[;
+smell:
+"The air is rank with dead electronics and neglect. Underneath that, a hint of rodent and human. Dust tickle your nose and makes your eyes burn.";
+listen: 
+"There's a barely percepible hum  beneath the tick tick tick from a a trapped fly in one of the  light fixures. The radio crackles from time to time. Somewhere among the stored junk things move. if you listen hard enough you hear the old hag breathe, a very unsettling sound since hearing it makes it impossible to unhear.";
+],
+each_turn[;
+if (random(20) == 1) 
+{
+switch (random(5)) 
+{
+1: 
+"The flourescent light above you hums.";
+2:
+"The radio hisses.";
+3: 
+"A whiff of dead electronics  makes your nose itch.";
+4: 
+"Somewhere, a trapped fly goes tick tick tick against a plastic light fixture.";
+5: 
+"You scratch the back of your head. You imagine it makes you think good.";
+}}
+],
+has ;
+
+TWDoor MainEntranceDoor "main entrance door"
+with name 'door' 'main' 'front' 'metal' 'entrance',
+description "It's the main door to the TechnoWitch Inc main building. It seems a bit massive and quite new in contrast to the filthy and clearly neglected space inside.", 
+when_closed[;
+if (location == Warehouse)  
+"The smell   of hot ashfalt drift in from a gap at the bottom of the closed entrance door to the South.";
+"The big metal door to the TechnoWitch warehouse is close and not just a little intimidating.";
+],
+when_open[;
+if (location == Warehouse)
+"Stark sunlight floods the warehouse, allowed in past the open door to the South. The wasted industrial landscape outside looks wonderful. It reminds you of freedom.";
+"The TechnoWitch Inc. main door is open. Head back into the dusty gloom to the North.";
+],
+door_to [;
+if (self in Warehouse) return Outside; return Warehouse;
+],
+door_dir [;
+if (self in Outside) return n_to; return s_to;
+],
+with_key SkeletonKey,
+found_in Outside Warehouse,
+has static door openable lockable ~locked ;
+
+
+furniture stool "stool" warehouse
+with name 'stool' 'chair',
+description "A round three-legged wooden stool, the seat polished to a high sheen by uncountable behinds, duct tape and spit  keeps it together. You approve.",
+before[;
+take, push, pull, turn, enter: "Don't worry about that thing. It's not important.";
+], 
+has ;
+
+furniture CableRoll "cable rolle" warehouse
+with name 'cable' 'cable roll' 'wooden' 'roll' 'electrical', 
+initial "An empy cable roll with an old transistor radioon top of it  stands at the bare concrete wal to your right.", 
+description "It's one of those wooden cable rolls holding thick electrical wire. it's currently empty and is used as a table. On top is an old radio. ^
+You dig the interior design choices in this place. Reminds you of your mom.",
+has ;
+
+gadget radio "transistor radio"CableRoll
+with name 'transistor radio' 'radio' 'transistor' 'crackling', 
+description "A dusty transistor radiosits on top of the giant cable roll, it's power cable snaking down through the middle of the roll and its antenna has been bent in interesting ways. it hisses softly. sometimes it bursts into crackling and sissle. The tuning knob is taped in place. on closer inspection, it seems the radio itself been affixed to the cable roll with duct tape. ^
+Interesting configuration. But who are you to judge?",
+before [;
+push, pull, turn, take: "you'd better not touch that mate. it probably belongs to the security lady. Besides that, it's firmly taped in place.";
+],
+react_before[;
+listen:if (noun == self) "hiss, crackle, sissle.";
+rfalse;
+],
+has concealed;
+
+gadget electronics "heaps of outdated electronics" warehouse
+with name 'heaps' 'nintendo' 'computer' 'boombox' 'junk' 'legwarmers' 'CD' 'vhs' 'video' 'tape' 'cassette' 'mixtape' 'poster' 'merch' 'metallica badge' 'backpack' 'tapedeck' 'sega' 'gameboy',
+description "Heaps and droves of late nineties computers, game consoles, everything that might have littered any teenagers pigsty of a room at that time. Take a guess, you'll probably find it here. All of it dusty and moldy, most of the crap deformed and stained by time and abuse. Lovely.",
+before[;
+search, lookunder:
+"Chances of you finding anything in that pile of stuff is minimal to none, Just leave it.";
+!default:
+!"Nah man. it's not worth it. It's a rabbithole ready to crush you to paste and spit you out in tatters. You would never  be the same.";
+],
+has scenery ;
+!Office
+TWRoom Office "Office"
+with name 'office',
+description "It appears to be an office. Junk of all sorts litter the flor which is layered in dirt. Years of dust and who knows what else swirl around your feet. Clouds of choking dry dust surround you as you try not to kick bits of this and that as you move around. To the west is a window. To the east, a bead curtain ripples gently, covering a dark space beyond. The far wall is covered corner to corner with a mix of movie posters, playboy centerfolds, and pictures of poultry. Chickens, ducks, geese, even a fessen.  While the movie posters all seem shiny and cared for, the chickens and spreadeagled ladies are all littlered with tiny holes.^
+Taking pride of place in this lovely space is a desk with complimentary chair, phone, and a fairly standard desktop PC setup.  ",
+s_to OfficeDoor,
+e_to Elevator,
+has ;
+
+!Brian, life and random
+
+staff Brian "Brian" Office
+with name 'Brian' 'clerk' 'guy' 'idiot',
+agt  1,
+description[; print "Brian is dedicated and loyal. A real snitch, a whiner, a nosepicker, as well as a know it all busybody. Nice chap, really. ";
+switch (self.agt){
+1: "He  appears a bit puzzled. Perhaps by your presence. Or the world en general.";
+2: "He scratches his sparse 3-day shadow and glances at something behind his desk that you can't see.";
+3: "Brian rolls his eyes and puffs his cheeks. In all his attempt s to seem casual, cracking his knuckles sort of gives him away.";
+4: "Brian looks a bit flustered. His eyes dart from his hands to the bebe bun on the wall and back.";
+5: 
+print "He's staring intensly at the grimy window, perhaps beyond it. Lost in thought, he doesn't notice the rat scurrying across ", (the) parent (BillyRat), ".";  
+}],
+initial[;
+!Description depends on Brians level of agitation. Check CSBB for mood reference code Something like self.agitation Some number. Increase and decrease depending on interaction.
+"Diligent as ever, Brian sits at his desk.";
+],
+has animate proper;
+
+
+
+object Crowbar"hereeavy looking crowbar"limbo
+with name 'crowbar',
+description "Black and ridiculously useful when there's need to break things.",
+has ;
+object Nail "nail" Office
+with name 'nail' 'hook',
+description "Just an ordinary three inch nail pounded into the door frame to hang things on. Crude, but Functional.",
+!Before [;
+!receive:
+!if (noun ~= OfficeKey) "That nail won't hold anything heavier than, let's jus say, maybe a key-ring? But hell, who am I to say?";
+!move OfficeKey  to nail; "You hang the office key back on the hook.";
+!default: "It's a nail. In a door frame. To hang a key on. Just leave it man.";
+!],
+has scenery supporter;
+
+object Window"Grimy window"Office 
+with name 'glass' 'window' 'pane' 'brick',
+description "Seemingly placed there without any thought on symmetry or esthetics, set somewhat crookedly in the wall is a window. Shedding yellowed white paint and grimy cracks in its badly abused wood serves as a sad excuse of a frame. A long since dead spider haunts its abandoned dwelling adorning one cracked windowpane. Beyond the dirty glass looms an even dirtier brick wall. You wonder about the view beyond the neglected barrier. This room could use a bit of light. ",
+when_closed "The office window is closed. You see a glimpse of a filthy brick wall out there. ",
+when_open "The window has been quite rudely forced open. fA stench of garbage and piss drifts in from the alley outside.",
+before[;
+open:
+if (Brian in location)
+"You glance at the window, wondering if it's even openable. Brian coughs and shakes his head, puckering his lips disapprovingly. You shrug and offer the clerk your best Who me? an look away.";
+if (crowbar notin player)
+"You step to the window and push, pull, and poke at it for a fruitless minute. The office window is   painted shut and doesn't seem to have been opened in decades.";
+give window open;
+"You jam the crowbar between the window and the frame and heave. Old paint cracks and wood groans from the abuse but tslowly, the window opens. The resulting opening might allow the former you to   squeeze through. Barely.  At your current state however, you'd be stuck half way through. You pat your belly and sigh. Yep.no amount of denial would prevent the inevitability of stuck. You make a feeble attempt to close the window, But even with your best effort it doesn't close all the way. You brush away some of the paint flakes and splinters and just hope no one notices.
+Garbage-fetted air drifts in through the opening."; 
+],
+has openable ~open scenery; 
+
+TWDoor OfficeDoor "door to the office"
+with name 'door' 'rickety' 'officedoor' 'plywood' 'office door',
+description "From the look of it, this door  was hastily hobbled together with plywood and steel wire. There is a length of frayed rope hanging out of a hole in the plywood as a make-shift handle. This door looks like it couldfall over any moment.",
+when_closed "The office door to the North is closed. Piece of crap as it is, it appears inpenetrable.", 
+when_open "The office door is open, hanging crookedly on steel wire hinges.", 
+door_to[; 
+if (self in Office) return Warehouse; return Office; 
+], 
+door_dir [; 
+if (self in Warehouse) return s_to; return n_to; 
+],
+with_key OfficeKey,
+found_in Warehouse Office,
+before[;
+open, enter:
+if (self has open) "The office door is open already, hanging crookedly on its wire hinges. Go North into the office.";
+if (letter hasnt BeenChecked)
+"the old hag steps in your way. She waggles a tobacco staine finger and shakes her head. Not happening, Kid, she hisses. ~Can't let any shithead just walk in there. How do I know you should even be here, Kid. Huh?~^
+She dismisses you with a fingerwagg and turns back to her business.";
+!rtrue;
+else
+give OfficeDoor open; 
+"You grab the frayed rope handle to the office door and pull very carefully until it grinds open about half way. You step back from the door in case it decides to fall over on you. Go north into the office.";
+],
+has static door openable lockable ~locked;
+Object sign "TechnoWitch Inc plaque" OfficeDoor
+with name 'plaque' 'sign' 'postit' 'note' 'pink' 'company' 'technowitch' 'sart-up',
+description "There's a small plaque mounted to the outside of the plywood door. The plaque is stuck to the door with staples, electrical tape, and globs of what could only be chewinggum. Something is written on it. Placed next to it is a pink post it note.",
+before [;
+consult, read: " You squint at the plaque that says: ^^ 
+~Techno Witch inc~. ^
+On a pink post it note next to the plaque someone has scribbled: ^^
+~ Trespassers will be spanked gently and sent home with a box of complimentary Lime Jell-O. ^^
+You have been warned.~";
+],
+has legible static concealed;
+
+object rope "Frayed rope handle" OfficeDoor 
+with name 'rope' 'handle' 'frayed' 'hemp',
+description "It's a few inches of frayed hemp rope. It's clearly meant to be used as a handle.",
+before[;
+pull, push, turn, take:
+<<open OfficeDoor>>;
+],
+has concealed;
+
+
+gadget nokia "Nokia phone" limbo
+with name 'phone' 'nokia' 'mobile' 'cell',
+description "A nokia cellphone - Its battery status as bad as your prospects for any of the names and numbers on that sim card.",
+before[;
+examine:rfalse; default: "it's dead man. and even if there were a charger kicking around here, who would you call? Seriously. leave it.";
+],
+has ;
+
+!Elevator
+TWRoom  Elevator "Elevator"
+with name 'elevator' 'lift',
+description "This is a small space that will be a functioning elevator at some point.",
+w_to Office,
+has ;
+
+!Objects starting out in limbo 
+
+gadget casio "Casio wristwatch" limbo
+with name 'watch' 'wristwatch' 'casio',
+description "Your trusted Casio watch. it's been with you since your highschool graduation. It's been running faithfully all these years. Until a couple of days ago. The bite marks from the neighbours miniature shnitzel dog or whatever the fuck that beast was are now a constant reminder of its final heroic act of protection. You can't bare taking it off.",
+before[;
+examine:rfalse; 
+default: "It's fine just like that man. Right where it is. Sentimentality can never be overrated. And remember, it will tell you the correct time at least once a day.";
+],
+has broken clothing;
+
+object lunch "lunch table" limbo
+with name 'lunch' 'food' 'menus' 'burger' 'burgers' 'ketchup' 'milkshake' 'vanilla' 'table' 'free' 'table' 'roach',
+description "Apparently this is the lunch table. There are menus from various food delivery services along with the leftovers, the empty wrappers, condoment packets, straws and various scavenging insects. You are not all that hungry at the moment. ",
+before [;
+puton:
+"Even if there was a reason to do that, there is no room to put anything else on the lunch table.";
+search, lookunder:
+"A quick glance tells you there is nothing of any use there."; 
+default:
+"Nope, nah-ah, aint happening. Not hungry, not interested, not desperate enough to have anything to do with the TechnoWitch Free lunch.";
+],
+has scenery; 
+Object letter "Crumpled letter from TechnoWitch Inc." limbo
+with name 'letter' 'envelope' 'paper' 'mail' 'post' 'invitation',
+description "It's the letter you recieved by way of honest to God real snail mail. The envelope was dirty and wrinkled making the lettter inside just barely legible. Strangely it was postdated twenty-four years ago but the letter inside was dated just that morning. Your application to the strange sounding startub had infact been sent just a week ago.",
+before [;
+consult, read: "You read the letter again and wonder if you are doing the right thing. But hell, you don't have a job anymore. Or any prospects to speak of. Talents... well, those are nothing to discuss in polite company are they now? ^^
+The letter reads: ^^
+The TechnoWitch Coorporation has the questionable pleasure of accepting your application for the position of Grunt code hack developer, third level. You will love it here. You will be paid in bad puns and politically incorrect observations about the world. If these terms are not acceptable to you, we at the TechnoWitch corp. ask you to please tell someone who cares. ^^
+Dress code: Wear whatever the fuck you want. No one will see you out of the server room for at least a decade. ^^ With warmest regards ^ Techno Witch, CEO.";
+],
+has legible;
+TWKey SkeletonKey "key to the TechnoWitch Warehouse" limbo
+with name 'skeleton' 'skeleton key' 'main key' 'exit key' 'entrance key',
+description "it's a non=descript stainless steel key without markings of any kind. It looks new in comparison with the place it supposedly secures.",
+Has ; 
+
+TWKey OfficeKey "key to the office" limbo
+with name 'office key' 'key' 'pocket knife' 'knife' 'spork',
+description "It's a pocket knife with a thick coating of silicon preventing it from opening properly. There's a string tying the knife and a crudely bent spork together to make an implement with pointy bits sticking out. You shrug. Sure, handle, pointy bits sticking out the end. Looks like a key to you.",
+has ;
+gadget CDCase "CD case" limbo
+with name 'CD' 'case' 'CD case''jewel case' 'jewel' 'case',
+description [;
+print "An empy CD case, scratched to shit. it's"; 
+if (self has open) " splayed open. "; 
+else 
+"It's taped shut."; 
+],
+has container openable transparent;
+
+gadget BusinessCard "TechnoWitch Inc. business card" limbo
+with name 'business card' 'business-card' 'card',
+description " it's a slightly battered standard business card. The style, layout, and paper quality seems to indicate it was printed from some word processor to some shit-brand ink printer.^
+But it does seem to have all the information you might need. The card says:^^
+~TechnoWitch Incorporated^
+Boonback warehouse 13, Third Industrial  Lane E, ^
+htp://www.houseofimp.com/technowitch/~^^
+
+Frowning at at the url syntax and the lack of a phone number, you scratch your head and put the card back in your pocket where it will live until your next improbable encounter witha washing machine.",
+has ;
+
+!Janine, life and random 
+
+gadget tablet "Janine's tablet" Warehouse
+with name 'tablet' 'yellow',
+description "It's a smallish yellow tablet without any obvious branding that you can see. You  squint hard but the darm woman has a way of always angling the thing away from your curious gaze. As long as she's holding on to it you'll never know what she is so absorbed in.",
+before[;
+take, remove:
+move tablet to player;
+"This is not meant to happen in the released game. But here, for some inexplicable reason that only Scott knows, You very quietly walk up to Janine and snatch the tablet out of her hands.^
+She seems momentarily puzzled but is  quickly  back to normal. And funnily enough, she is still holding a yellow tablet of unknown brand and is right  back to poking at it.  The magic of game creation in play, Ladies and pervs.";
+],
+has concealed;
+
+object EmptyVial "Now empty glass bottle" limbo
+with name 'empty' 'vial' 'bottle',
+description "A small glass vial with a cork stopper. It's empty now.",
+has container openable ~open concealed;
+
+object Danish"danish pastry" limbo
+with name 'danish' 'pastry',
+description[;
+if (self has Danger)
+"Brian's Danish looks extra tasty now with a sprinkling of fine, slightly luminecent powder.";  
+"Brian's danish looks delicious.  But it's not for you.";
+],
+before[;
+touch, take, transfer, push, pull:
+if (Brian in location)
+"Stealing Brian's lunch? What are you? Suicidal? At least wait until he's out of the office.";
+move Danish to player;
+"You grab Brian's danish and quickly stuff it down your back pocket.";
+eat:
+if (self has Danger)
+"You look at the danish. It looks so delicious. So very....  But no matter how you try to persuade yourself that the glittering powder you sprinkled on it is just powdered sugar, you know damn right well it's not. That special danish is not for you.";
+"Nah, better not. That danish has a purpose greater than easing your sugar craving. Hands off!";
+],
+has  edible;
+
+
+object Vial "Now empty glass bottle" limbo
+with name 'vial' 'bottle',
+description "A small glass vial with a cork stopper. There's some kind of powder in it. Whatever that is, you probably shouldn't try it.",
+has container openable open concealed;
