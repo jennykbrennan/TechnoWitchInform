@@ -1,6 +1,7 @@
 class Animal
 has concealed animate proper;
-!TW animals move around a lot. Not stopped by doors or windows. Except for the alley rat who the player needs to let in through the window. Alley Rat is mean and can cause actual damage.  Alley rat can only be caught by alley cat. 
+!Note. TW animals move around a lot. Not stopped by doors or windows. 
+!Note. Except for the alley rat who the player needs to let in through the window. Alley Rat is mean and can cause actual damage.  Alley rat can only be caught by alley cat. 
 
 Animal BillyRat "Billy Rat" limbo	
 with name  'Billy' 'rat',
