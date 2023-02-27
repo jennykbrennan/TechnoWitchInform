@@ -9,7 +9,7 @@ A new job, a new boss, an interesting old startup with sketchy motivations. What
 
 Would you like to restore a saved game?
 
->n
+\>n
 
 You made it. and that's about the only good thing you can say about this first day on a new job. After realizing that the worn looking dirty warehouse at the end of the road actually was the place, you entered the building with a good amount of skepticism. As you shut the big metal door behind you, you really start to wonder. If it hadn't been for the rent being late this month and the guinea pig staring with such disspoinment at yu while refusing to eat the cheaper brand Hamster chow, you wouldn't even bother. 
 ^
@@ -23,7 +23,7 @@ I am returning to traditional second person, present tense narrative in this gam
 
 "Watching the black rat scurry across the lunch table, you resist the urge to try to catch it and bring it home. You let it get on its way while looking more carefully at the cardboard box the little beast came out of. Battered and grimy, the box is the size of a something like a microwave. It's free from any labels or markings. The flap on the top are clumsily puzzled together to keep it closed.
 
->open box
+\>open box
 
 After a quick glance over your shoulder at Janine who seems unusually engrosed in her tablet to make sure she is still ignoring you, you carefully pull the flaps apart. The damn box is full of...
 nothing. How disappointing."
@@ -37,15 +37,24 @@ For testers.
 Open an issue for each problem. Use quotes from gameplay. Spelling and grammar corrections are welcome. Ideas for the continued building of this world are very much welcome.
 
 To get ideas for my style of narrative, you can check
-
+Crystal and stone, Beetle and Bone - Version 4.
 https://ifdb.org/viewgame?id=4qfjt6y5pkan2220 
 
 Wit the cabiot that TechnoWitch Inc is a completely different genre and my writing has changed and hopefully improved over the years.
 
+Resources:
+
+Included the Inform Designers manual by Graham Nelson - Fourth edition, in Html as well as PDF.
+
+For anything else regarding Interactive Fiction and how to create it, you can probably find it by starting here:
+
+http://www.plover.net/~textfire/raiffaq/ifaq/ifaqhtml.html
+ 
 For other things JennyK a.k.a TechnoWitch: 
 
 https://houseofimp.com
-***
+
+**
 
 Disclaimer:
 This project is created to force me to lern git and github. It's practice. In other words, , this page is fleeting, these files may vanish suddenly, and I will most certainly make a mess of things. If such a trainwreck is not your jam, you are free to move along and never look back. :)

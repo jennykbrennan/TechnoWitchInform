@@ -1,0 +1,27 @@
+Outside
+
+North is the TechnoWitch Warehouse. 
+N To Warehouse
+Northwest is the corner of the warehouse. A hint of abandoned junk around the corner.   To 
+NW to Alley.
+West  road into distant industry wasteland and forest beyond
+Southwest more industry wasteland
+South Abandon office building.
+South east industry
+East is the road to the busstop and unnamed two-lane road to town.
+E to Exit
+Northeast is the corner of the Warehouse. Nothing interesting here.
+ 
+Warehouse
+N toOffice
+
+Office
+West is the grimy window. 
+W to Alley
+E to Elevator
+
+Elevator
+W to Office
+U to open shaft. 
+Down doesn't work, for now.
+ 

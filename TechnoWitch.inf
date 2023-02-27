@@ -28,7 +28,8 @@ switch (deadflag)
 !Note. Deadflag 3 is used for after a brutal killing of an NPC. 
 3: print "Whatever compelled you to commit this horrible deed, TechnoWitch appreciates your dedication and attention to detail. May you reside in hell for eternity and beyond. ^
 Well done!";
-4: print "Now, that was just dumb. Good luck next time.";}];
+!Note. Deadflag 4 is for trying something extraordinarily stupid, a definite undo type game over.
+4: print "Oh, how clever. Lucky for you, you can undo.";}];
 
 attribute legible;
 attribute BeenChecked;
@@ -36,15 +37,13 @@ attribute BeenSeen;
 attribute broken;
 attribute Danger;
 
-!Include "Locksmith";
-
 Include "betatest";
+
 Include "VerbLib";
 include "About";
+!Note. To write: A decent about text.
 Include "Grammar";
 Include "smartcantgo";
-!Extend 'lock' first * noun=DefaultLockTest -> DefaultLock;
-!Extend 'unlock' first * noun=DefaultLockTest -> DefaultUnlock;  
 Verb 'Talk' 
 *'to' creature              -> Talk;
 [ TalkSub;
@@ -53,7 +52,7 @@ Verb 'Talk'
 ![ReadSub;
 !"Read what?"; ];
 
-!Initialising 
+!Section Initialising the game 
 
 [Initialise;
 SetTime (590, 1);
@@ -61,7 +60,6 @@ location = Warehouse;
 move hag to warehouse;
 move BillyRat to Office;
 move letter to player;
-!move CDCase to player;
 move nokia to player;
 move casio to player;
 give casio worn;
@@ -69,7 +67,7 @@ StartDaemon (Warehouse);
 thedark.description = "It's daark in here. WTF?";
 player.description = "Do you really wanna go there?";
 
-!Restore saved game
+!Section Restore saved game
 
 print "Would you like to restore a saved game? ";
 if (YesOrNo()) <Restore>;
@@ -91,8 +89,7 @@ New meat, she says. It's not a question.  ^^
 You nod while forcing your heart to slow the fuck down.   Determined to be polite, you smile. You know it's not your best effort but she doesn't seem to notice. Her voice crackles and hisses near your ear as she says, Boo!, grins, pullss her head back and sputters a gob of tobacco scum at your feet and scrapes at her balding scalp. ^^
 She picks brown gunk out of the corner of her one remaining eye and focuses it unsteadily on you. Without another word, she waggles her tongue and picks at it with index finger and thumb to dislodge from it something you can't, and might not want to identify. You try not to think about it.^
 Then she quickly turns  and retreats to where she must have been before, leaving you to it.  ^
-You draw a shaky breath and attempt to remember why you are even there. Ah, right. it's called work. Yeah, you do need a job. But suddenly you are not so sure.";
-];
+You draw a shaky breath and attempt to remember why you are even there. Ah, right. it's called work. Yeah, you do need a job. But suddenly you are not so sure."; ];
 
 object limbo"limbo"
 with name 'limbo',
@@ -101,9 +98,9 @@ has;
 
 include "Zoo";
 include "Hag";
-Include "ExtraSubs";
+Include "GrammarSubs";
 
-!Classes
+!Section Classes
 
 class TWRoom
 with description "It's a room without a description.",
@@ -125,10 +122,11 @@ rfalse;
 ],
 has light;
 
+!Note. Furniture class subject to removal.
+
 class furniture
-!Note that Furniture class is ultimately not very usable. Think I'll remove it.  
 with name 'furniture',
-description "Furniture is something to sit or stand on. Something with a supporter attribute, not necessarily container. Should be ultimately concealed and static unless otherwise specified.",
+description "Furniture is something to sit or stand on. Something with a supporter attribute, not necessarily container. Should be ultimately concealed and static, most likely scenery, unless otherwise specified.",
 has supporter scenery; 
 
 class gadget
@@ -142,15 +140,53 @@ turn, take, push, pull, attack: "Now why would you do That? Leave it man";
 Has ;
 
 
-!Class staff was here
+!Note Class staff was here
 class TWDoor
 has ;
 class TWKey
 has ;
 
-!Outside 
+!Section Outside 
 TWRoom Outside "Outside technoWitch Inc, by the front door"
 with name 'outside',
+compass_look[obj;
+if (parent (player) == Ashtray)
+switch (obj){
+n_obj:
+"Looking North shows the main door leading into the TechnoWitch warehous.";
+nw_obj:
+"Looking Northwest, you find yourself staring at the concrete ashtray. It looks the same as always. A bittersweet reminder of your own very first job and rushed gatherings around just such a thing. You dont' smoke anymore but if anything would make you start it up it's that pillar of nasty and nostalgia.^ You can get up on top of it to see if the view is any different from there.";
+w_obj:
+"Looking West, the rough ashphalt road narrows into a distant country road as it deteriorates. Somewhere over there starts forests and farmland. Nowhere you've ever wanted to go. Certainly not now.";
+s_obj, se_obj , sw_obj:
+"Looking across the road you take a closer look at the buildings. A low structure that could be an office complex of sort seems abandoned.  Clustering around it, a disorganized collection of storage units and garages look equally forgotten.";
+u_obj:
+"You reluctantly turn your face upward. The sky is as boring, bland, too blue, and non-descript as it tend to do when blue is not your favorite colour. Meh. You don't care much for good weather. The sun is up so there's that. You don't care much for the sun either. Sometimes you wonder why but mostly you really couldn't give a shit.";
+d_obj:
+"The ground in front of the TechnoWitch building is nothing but a bit of widening of the cracked ashfalt road. Dirty and ugly.";
+ne_obj:
+"To the Northeast all you see is more of the filthy brick facade  and the warehouse corner opening up to a drab landscape of polluted remnants of long gone business ambition. ";
+out_obj:"You look around the sundappled dusty industry park. From abandoned offices and broken down machinery and stubborn weed forcing their way through polluted ground, you wonder for the first time why this would be the location for a supposed tech startup. You shade your eyes and try to look for any signs of activity in the area but there is nothing going on there. You wonder for a second if maybe it's better to just go home. There are other jobs.  The busstop isn't that far away.";}
+if (location == Outside)
+switch (obj){
+n_obj:
+"Looking North shows the main door leading into the TechnoWitch warehous.";
+nw_obj:
+"Looking Northwest, you find yourself staring at the concrete ashtray. It looks the same as always. A bittersweet reminder of your own very first job and rushed gatherings around just such a thing. You dont' smoke anymore but if anything would make you start it up it's that pillar of nasty and nostalgia.^ You can get up on top of it to see if the view is any different from there.";
+w_obj:
+"Looking West, the rough ashphalt road narrows into a distant country road as it deteriorates. Somewhere over there starts forests and farmland. Nowhere you've ever wanted to go. Certainly not now.";
+s_obj, se_obj , sw_obj:
+"Looking across the road you take a closer look at the buildings. A low structure that could be an office complex of sort seems abandoned.  Clustering around it, a disorganized collection of storage units and garages look equally forgotten.";
+u_obj:
+"You reluctantly turn your face upward. The sky is as boring, bland, too blue, and non-descript as it tend to do when blue is not your favorite colour. Meh. You don't care much for good weather. The sun is up so there's that. You don't care much for the sun either. Sometimes you wonder why but mostly you really couldn't give a shit.";
+d_obj:
+"The ground in front of the TechnoWitch building is nothing but a bit of widening of the cracked ashfalt road. Dirty and ugly.";
+ne_obj:
+"To the Northeast all you see is more of the filthy brick facade  and the warehouse corner opening up to a drab landscape of polluted remnants of long gone business ambition. ";
+out_obj:"You look around the sundappled dusty industry park. From abandoned offices and broken down machinery and stubborn weed forcing their way through polluted ground, you wonder for the first time why this would be the location for a supposed tech startup. You shade your eyes and try to look for any signs of activity in the area but there is nothing going on there. You wonder for a second if maybe it's better to just go home. There are other jobs.  The busstop isn't that far away.";}
+],
+
+!End compass look
 description[;
 print  "You are outside the TechnoWitch Inc warehouse, where the road away runs a straight line on cracked asfalt through a sun dappled  indrustrial block on the outskirts of town. In the distance, a sad looking sign indicates a bus stop. But you know from experience that the bus doesn't stop there. Dusty heat rises from the blacktop and the silence seems strange considering the presence of industry and seemingly active businesses on either side of the road. ^
 You squint at the nearest building, not dissimilar to the one you are standing in front of. After closer scrutiny it does seem abandoned. A small cluster of office spaces on the other side of the road seem equally empty and neglected.^";
@@ -166,22 +202,37 @@ smell: "The air outside is dry and dusty with the unmistakeable tang of hot ashf
 listen: "There's a distant hum of traffic and machinery, reminding you that there is a town nearby. In this spot however, it's eerily quiet. ";
 ],
 n_to MainEntranceDoor,
+!Note. Make the exit to outside a bit more interesting. The door is heavy, the sunlight is blinding, the transition feels odd.
 has ;
+
 object Ashtray "concrete ashtray" Outside
 with name 'ashtray' 'pipe' 'cement' 'concrete' 'cigarette' 'butt' 'butts',
+add_to_scope Sand,
+!Note. Needs testing.
 description
 "It's a cement pipe standing verticlly at the front door. It's filled with sand. A few cigarette butts poke out of the sand, evidence of someone checking out for the occational smoke. But none of the butts look recent.",
 before[;
+throwat, receive:
+"Seems pointless to put anything in there. You don't smoke anymore remember?"; ], 
+!note. Enterable ashtray needs to be expanded.
+!Note. U_obj, jump, climb etc, needs testing.
+after[;
+climb:
+<<enter self>>;
 enter:
-"You climb up on top of the cement pipe. You stand there awkwardly for a minute, wonering why that was necessary.  The view is the same up there. You climb back down to the ground, hoping no one saw you, brushing off a bit of sand from your hands.";
+"You climb up on top of the cement pipe. You stand there awkwardly for a minute, wonering why that was necessary. The view is the same from up there. Isn't it? Maybe it would be worth taking another look around?";
+exit:
+print "You climb back down to the ground, hoping no one saw you, brushing off a bit of sand from your hands.";
+<<go d_obj>>;
 search:
 "You dig your fingers into the sand but find nothing of interest.";
 take, push, pull,  turn, burn:
 "Nah, don't worry about it.  It looks to have stood there since the eighties and it will still be there  in another forty years.";
 ],
-has concealed supporter;
+has scenery enterable supporter;
 
-object sand "sand"limbo
+!Note. Sand added to ashtray scope. Needs testing. 
+object Sand "sand"limbo
 with name 'sand',
 description "The sand from the cement ashtray outside the TW warehouse. Not particularly fine, or coarse. Smells bad. But that's pretty much it.",
 before[;
